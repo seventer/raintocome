@@ -103,6 +103,9 @@ def createSensor():
 
 def updateSensor():
     r = RainFuture()
+    if Parameters["Mode6"] == "Debug":
+        r.debug=True
+    
     lat = Parameters["Mode1"]
     lon = Parameters["Mode2"]
     ahead = int(Parameters["Mode3"])
