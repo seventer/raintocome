@@ -3,13 +3,13 @@
 # Author: Gerard
 #
 """
-<plugin key="BasePlug" name="Rain predictor" author="gerardvs" version="1.0.0" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="http://www.buienradar.nl/overbuienradar/gratis-weerdata">
+<plugin key="BasePlug" name="Rain Predictor Buienradar" author="gerardvs" version="1.0.1" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="http://www.buienradar.nl/overbuienradar/gratis-weerdata">
     <params>
         <param field="Mode1" label="Latitude" width="75px" required="true" default=""/>
         <param field="Mode2" label="Longitude" width="75px" required="true" default=""/>
         <param field="Mode3" label="Lookahead minutes" width="75px" required="true" default="30"/>
         <param field="Mode4" label="Update every x minutes" width="75px" required="true" default="15"/>
-        <param field="Mode5" label="Value or mm" width="100px">
+        <param field="Mode5" label="Value or mm" width="75px">
             <options>
                 <option label="value" value="value"/>
                 <option label="mm" value="mm"  default="mm" />
@@ -35,14 +35,14 @@ lastUpdate = datetime.now()
 
 
 def onStart():
+    global lastUpdate
     if Parameters["Mode6"] == "Debug":
             Domoticz.Debugging(1)
-    Domoticz.Debug("onStart called")
-    global lastUpdate 
+    Domoticz.Debug("onStart called") 
     lastUpdate = datetime.now()
-    createSensor()
+    CreateSensor()
     DumpConfigToLog()
-    updateSensor()
+    UpdateSensor()
     Domoticz.Heartbeat(30)
     return True
 
@@ -96,12 +96,13 @@ def DumpConfigToLog():
 
 
 
-def createSensor():
+def CreateSensor():
     if (len(Devices) == 0):
        Domoticz.Device(Name="Rain2Come", Unit=1, TypeName="Custom").Create()
-       Domoticz.Debug("Rain2Come Device created")
+       Domoticz.Log("Rain2Come Device created")
 
-def updateSensor():
+def UpdateSensor():
+    global lastUpdate
     r = RainFuture()
     if Parameters["Mode6"] == "Debug":
         r.debug=True
@@ -116,7 +117,6 @@ def updateSensor():
           val = r.getPrediction(lat,lon,ahead)
     Devices[1].Update(0,str(val))
     Domoticz.Log("Sensor updated: " + str(val))
-    global lastUpdate
     lastUpdate = datetime.now()
 
 

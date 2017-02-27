@@ -1,3 +1,9 @@
+#
+# Rain prediction from Buienradar data
+# shows maximum value within the coming n minutes
+# Author: Gerard
+#
+
 import csv
 import sys, math
 import urllib.request
