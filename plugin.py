@@ -75,7 +75,7 @@ def onHeartbeat():
     Domoticz.Debug("onHeartbeat called")
     interval = int(Parameters["Mode4"])
     if isActionTime(interval):
-       updateSensor()
+       UpdateSensor()
 
 
 
