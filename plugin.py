@@ -1,13 +1,13 @@
 # Rain prediction plugin
 #
-# Author: Gerard
+# Author: Gerardvs
 #
 """
-<plugin key="BasePlug" name="Rain Predictor Buienradar" author="gerardvs" version="1.0.1" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="http://www.buienradar.nl/overbuienradar/gratis-weerdata">
+<plugin key="FutureRainPlug" name="Rain Predictor Buienradar" author="gerardvs" version="1.0.2" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="http://www.buienradar.nl/overbuienradar/gratis-weerdata">
     <params>
-        <param field="Mode1" label="Latitude" width="75px" required="true" default=""/>
-        <param field="Mode2" label="Longitude" width="75px" required="true" default=""/>
-        <param field="Mode3" label="Lookahead minutes" width="75px" required="true" default="30"/>
+        <param field="Mode1" label="Latitude" width="75px" required="true" default="52.09"/>
+        <param field="Mode2" label="Longitude" width="75px" required="true" default="5.11"/>
+        <param field="Mode3" label="Lookahead minutes" width="75px" required="true" default="45"/>
         <param field="Mode4" label="Update every x minutes" width="75px" required="true" default="15"/>
         <param field="Mode5" label="Value or mm" width="75px">
             <options>
