@@ -3,10 +3,8 @@
 # Author: Gerardvs
 #
 """
-<plugin key="FutureRainPlug" name="Rain Predictor Buienradar" author="gerardvs" version="1.0.2" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="http://www.buienradar.nl/overbuienradar/gratis-weerdata">
+<plugin key="FutureRainPlug" name="Rain Predictor Buienradar" author="gerardvs" version="1.0.3" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="http://www.buienradar.nl/overbuienradar/gratis-weerdata">
     <params>
-        <param field="Mode1" label="Latitude" width="75px" required="true" default="52.09"/>
-        <param field="Mode2" label="Longitude" width="75px" required="true" default="5.11"/>
         <param field="Mode3" label="Lookahead minutes" width="75px" required="true" default="45"/>
         <param field="Mode4" label="Update every x minutes" width="75px" required="true" default="15"/>
         <param field="Mode5" label="Value or mm" width="75px">
@@ -32,16 +30,18 @@ from datetime import datetime, timedelta
 
 
 lastUpdate = datetime.now()
+location = ""
 
 
 def onStart():
     global lastUpdate
     if Parameters["Mode6"] == "Debug":
             Domoticz.Debugging(1)
-    Domoticz.Debug("onStart called") 
+            Domoticz.Debug("onStart called")
+            DumpConfigToLog()
     lastUpdate = datetime.now()
     CreateSensor()
-    DumpConfigToLog()
+    #DumpSettingsToLog()
     UpdateSensor()
     Domoticz.Heartbeat(30)
     return True
@@ -94,6 +94,32 @@ def DumpConfigToLog():
         Domoticz.Debug("Device LastLevel: " + str(Devices[x].LastLevel))
     return
 
+def DumpSettingsToLog():
+    for x in Settings:
+        if Settings[x] != "":
+            Domoticz.Debug( "'" + x + "':'" + str(Settings[x]) + "'")
+    Domoticz.Debug("Device count: " + str(len(Devices)))
+    return
+
+def GetLocation():
+    global location
+    if Settings["Location"] != "":
+        location = Settings["Location"].split(';')
+        if (len(location)==2):
+            Domoticz.Log( "'Lat':'" + location[0] + " Lon:" + location[1] + "'")
+        else:
+            LocationError()
+    else:
+        LocationError()
+    
+    return
+        
+        
+def LocationError():        
+        Domoticz.Error("Error reading location. Please enter the location coordinates in the system settings.")
+        Domoticz.Error("Using default location. 52.09,5.11")
+        location[0]="52.09"
+        location[1]="5.11"
 
 
 def CreateSensor():
@@ -103,18 +129,20 @@ def CreateSensor():
 
 def UpdateSensor():
     global lastUpdate
+    global location
+    GetLocation()
     r = RainFuture()
     if Parameters["Mode6"] == "Debug":
         r.debug=True
     
-    lat = Parameters["Mode1"]
-    lon = Parameters["Mode2"]
+#    lat = Parameters["Mode1"]
+#    lon = Parameters["Mode2"]
     ahead = int(Parameters["Mode3"])
     val = 0
     if Parameters["Mode5"] == "value":
-          val = r.getPredictionValue(lat,lon,ahead)
+          val = r.getPredictionValue(location[0],location[1],ahead)
     else:
-          val = r.getPrediction(lat,lon,ahead)
+          val = r.getPrediction(location[0],location[1],ahead)
     Devices[1].Update(0,str(val))
     Domoticz.Log("Sensor updated: " + str(val))
     lastUpdate = datetime.now()
