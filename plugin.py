@@ -124,7 +124,7 @@ def LocationError():
 
 def CreateSensor():
     if (len(Devices) == 0):
-       Domoticz.Device(Name="Rain2Come", Unit=1, TypeName="Custom").Create()
+       Domoticz.Device(Name="Rain2Come", Unit=1, TypeName="Humidity").Create()
        Domoticz.Log("Rain2Come Device created")
 
 def UpdateSensor():
@@ -143,8 +143,13 @@ def UpdateSensor():
           val = r.getPredictionValue(location[0],location[1],ahead)
     else:
           val = r.getPrediction(location[0],location[1],ahead)
-    Devices[1].Update(0,str(val))
-    Domoticz.Log("Sensor updated: " + str(val))
+    
+    humstat = "2"
+    if (val>0):
+        humstat="3"
+              
+    Devices[1].Update(val,humstat)
+    Domoticz.Log("Sensor updated: " + str(val) + ";" + humstat)
     lastUpdate = datetime.now()
 
 
