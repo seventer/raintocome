@@ -133,22 +133,21 @@ def LocationError():
 def CreateSensor():
     if (len(Devices) == 0):
        devID=Parameters["Mode1"]
-       Domoticz.Device(Name="Rain2Come", Unit=1, TypeName="Humidity",Used=0, DeviceID=devID).Create()
+       Domoticz.Device(Name="Rain2Come", Unit=1, TypeName="Custom",Used=1, DeviceID=devID).Create()
        Domoticz.Log("Rain2Come Device created")
 
 def UpdateSensor():
     global lastUpdate
     global location
     nVal=0
-    sVal="2"
+    sVal=255
     
     if Parameters["Mode2"] == "Emulate":
         nVal = Devices[1].nValue
         nVal += 5
-        sVal="3"
         if nVal>255:
             nVal=0
-            sVal="2"
+        sVal = 255 - nVal
     else:
         GetLocation()
         r = RainFuture()
@@ -162,14 +161,11 @@ def UpdateSensor():
         else:
               nVal = r.getPrediction(location[0],location[1],ahead)
         
-        sVal = "2"
-        if (nVal>0):
-            sVal="3"
+        sVal = nVal 
     
-                  
-    Devices[1].Update(nVal,sVal)
+    Devices[1].Update(nVal,str(sVal))
 
-    Domoticz.Log("Sensor updated: " + str(nVal) + ";" + sVal)
+    Domoticz.Log("Sensor updated: " + str(nVal) + ";" + str(sVal))
     Domoticz.Debug("Devices[1].Idx=" + str(Devices[1].ID))
     Domoticz.Debug("Devices[1].nValue=" + str(Devices[1].nValue))
     Domoticz.Debug("Devices[1].sValue=" + Devices[1].sValue)
