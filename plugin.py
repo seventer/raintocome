@@ -3,7 +3,7 @@
 # Author: Gerardvs
 #
 """
-<plugin key="FutureRainPlug" name="Rain Predictor Buienradar" author="gerardvs" version="1.0.3" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="http://www.buienradar.nl/overbuienradar/gratis-weerdata">
+<plugin key="FutureRainPlug" name="Rain Predictor Buienradar" author="gerardvs" version="1.1.0" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="http://www.buienradar.nl/overbuienradar/gratis-weerdata">
     <params>
         <param field="Mode1" label="DeviceID" width="125px" required="true" default="321H123U"/>
         <param field="Mode2" label="Emulate" width="75px">
