@@ -148,6 +148,7 @@ def UpdateSensor():
         if nVal>255:
             nVal=0
         sVal = 255 - nVal
+        Devices[1].Update(nVal,str(sVal))
     else:
         GetLocation()
         r = RainFuture()
@@ -161,9 +162,10 @@ def UpdateSensor():
         else:
               nVal = r.getPrediction(location[0],location[1],ahead)
         
-        sVal = nVal 
+        sVal = nVal
+        Devices[1].Update(0,str(nVal)) 
     
-    Devices[1].Update(nVal,str(sVal))
+    
 
     Domoticz.Log("Sensor updated: " + str(nVal) + ";" + str(sVal))
     Domoticz.Debug("Devices[1].Idx=" + str(Devices[1].ID))
